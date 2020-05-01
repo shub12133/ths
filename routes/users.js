@@ -116,4 +116,25 @@ router.get('/google/callback', passport.authenticate('google'), (req,res)=>{
   })
 })
 
+// github 
+router.get('/github', passport.authenticate('github',{
+  scope : [
+    "https://www.githubapis.com/auth/userinfo.profile",
+    "https://www.githubapis.com/auth/userinfo.email"
+  ]
+}))
+
+// redirect url 
+router.get('/github/callback', passport.authenticate('github'), (req,res)=>{
+
+const payload = {
+  id : req.user._id
+  
+}
+jwt.sign(payload,'SECRETKEY' ,{expiresIn: 60}, (err,token)=>{
+  res.json(token)
+  // res.redirect(`http://localhost:3000/oauth/${token}`)
+})
+})
+
 module.exports = router;
